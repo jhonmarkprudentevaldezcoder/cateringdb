@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Users = require("./models/userModel");
+const Themes = require("./models/themeModel");
 
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -14,6 +15,63 @@ app.use(express.urlencoded({ extended: false }));
 //default route
 app.get("/", (req, res) => {
   res.send("API WORKING SUCCESS");
+});
+
+//add theme
+app.post("/theme", async (req, res) => {
+  try {
+    const theme = await Themes.create(req.body);
+    res.status(200).json(theme);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//get all thenes
+app.get("/theme", async (req, res) => {
+  try {
+    const themes = await Themes.find({});
+    res.status(200).json(themes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//search theme by category
+app.get("/theme/:category", async (req, res) => {
+  try {
+    const { category } = req.params;
+    const theme = await Themes.find({ category: category });
+
+    if (theme.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No resreved id matching records found" });
+    }
+
+    res.status(200).json(theme);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//update theme
+app.put("/theme/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const theme = await Themes.findByIdAndUpdate(id, req.body);
+
+    if (!theme) {
+      return res
+        .status(404)
+        .json({ message: `cannot find any Bus with ID ${id}` });
+    }
+    const updatedtheme = await Themes.findById(id);
+    res.status(200).json(updatedtheme);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 //register
