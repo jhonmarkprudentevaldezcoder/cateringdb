@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Users = require("./models/userModel");
 const Themes = require("./models/themeModel");
+const Foods = require("./models/foodModel");
+const Drinks = require("./models/drinkModel");
 
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -16,6 +18,8 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
   res.send("API WORKING SUCCESS");
 });
+
+//  theme
 
 //add theme
 app.post("/theme", async (req, res) => {
@@ -131,6 +135,128 @@ app.post("/login", async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// close theme
+
+// food
+
+//add food
+app.post("/food", async (req, res) => {
+  try {
+    const food = await Foods.create(req.body);
+    res.status(200).json(food);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//get all foods
+app.get("/food", async (req, res) => {
+  try {
+    const foods = await Foods.find({});
+    res.status(200).json(foods);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//search foods by category
+app.get("/food/:category", async (req, res) => {
+  try {
+    const { category } = req.params;
+    const food = await Foods.find({ category: category });
+
+    if (food.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No resreved id matching records found" });
+    }
+
+    res.status(200).json(food);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//update food
+app.put("/food/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const food = await Foods.findByIdAndUpdate(id, req.body);
+
+    if (!food) {
+      return res
+        .status(404)
+        .json({ message: `cannot find any Bus with ID ${id}` });
+    }
+    const updatedFood = await Foods.findById(id);
+    res.status(200).json(updatedFood);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// close food
+
+// drinks
+
+//add drinks
+app.post("/drink", async (req, res) => {
+  try {
+    const drink = await Drinks.create(req.body);
+    res.status(200).json(drink);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//get all foods
+app.get("/drink", async (req, res) => {
+  try {
+    const drinks = await Drinks.find({});
+    res.status(200).json(drinks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//search foods by category
+app.get("/drink/:category", async (req, res) => {
+  try {
+    const { category } = req.params;
+    const drink = await Drinks.find({ category: category });
+
+    if (drink.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No resreved id matching records found" });
+    }
+
+    res.status(200).json(drink);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//update food
+app.put("/drink/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const drink = await Drinks.findByIdAndUpdate(id, req.body);
+
+    if (!drink) {
+      return res
+        .status(404)
+        .json({ message: `cannot find any Bus with ID ${id}` });
+    }
+    const updateddrink = await Drinks.findById(id);
+    res.status(200).json(updateddrink);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
