@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 
 //default route
 app.get("/", (req, res) => {
-  res.send("API WORKING SUCCESS");
+  res.send("API CATERING APP WORKING SUCCESS");
 });
 
 //  theme
@@ -263,7 +263,7 @@ app.put("/drink/:id", async (req, res) => {
 mongoose.set("strictQuery", false);
 mongoose
   .connect(
-    "mongodb+srv://admin:8WVslr9EFLaHCdTS@cluster0.msxip.mongodb.net/testdb"
+    "mongodb+srv://catering4D:catering@123@cateringcluster.t92orr6.mongodb.net/"
   )
   .then(() => {
     console.log("connected to MongoDB");

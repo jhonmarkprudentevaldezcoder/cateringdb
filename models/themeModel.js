@@ -36,6 +36,9 @@ const themeSchema = mongoose.Schema(
     timeout: {
       type: String,
     },
+    type: {
+      type: String,
+    },
   },
   {
     timestamps: true,
