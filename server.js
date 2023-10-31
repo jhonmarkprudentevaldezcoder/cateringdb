@@ -263,7 +263,7 @@ app.put("/drink/:id", async (req, res) => {
 mongoose.set("strictQuery", false);
 mongoose
   .connect(
-    "mongodb+srv://admin:8WVslr9EFLaHCdTS@cluster0.msxip.mongodb.net/testdb"
+    "mongodb+srv://catering4D:catering%40123@cateringcluster.t92orr6.mongodb.net/reservation_management"
   )
   .then(() => {
     console.log("connected to MongoDB");
