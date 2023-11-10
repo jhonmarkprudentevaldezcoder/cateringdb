@@ -4,6 +4,7 @@ const Users = require("./models/userModel");
 const Themes = require("./models/themeModel");
 const Foods = require("./models/foodModel");
 const Drinks = require("./models/drinkModel");
+const ReservedDates = require("./models/reservedDateModel");
 
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -17,6 +18,59 @@ app.use(express.urlencoded({ extended: false }));
 //default route
 app.get("/", (req, res) => {
   res.send("API CATERING APP WORKING SUCCESS");
+});
+
+//check date
+app.get("/reservedDate/:themeId/:date", async (req, res) => {
+  try {
+    const { themeId, date } = req.params;
+
+    const reservedDate = await ReservedDates.findOne({
+      themeId: themeId,
+      date: date,
+    });
+
+    if (reservedDate) {
+      return res
+        .status(200)
+        .json({ message: "Theme is already reserved on this date." });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "Theme is available on this date." });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+//reserved a date
+app.post("/reserve", async (req, res) => {
+  try {
+    const { themeId, date, userId } = req.body;
+
+    const existingReservation = await ReservedDates.findOne({
+      themeId: themeId,
+      date: date,
+      userId: userId,
+    });
+
+    if (existingReservation) {
+      return res
+        .status(400)
+        .json({ message: "Theme is already reserved on this date." });
+    }
+
+    const newReservation = new ReservedDates({
+      themeId: themeId,
+      date: date,
+      userId: userId,
+    });
+    await newReservation.save();
+
+    res.status(201).json({ message: "Reservation successful!" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 //  theme

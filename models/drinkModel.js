@@ -19,6 +19,7 @@ const drinkSchema = mongoose.Schema(
       type: String,
     },
     reviews: {
+      default: "0.0",
       type: String,
     },
   },
