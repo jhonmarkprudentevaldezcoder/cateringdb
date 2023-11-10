@@ -33,7 +33,7 @@ app.get("/reserve/:themeId/:date", async (req, res) => {
     if (reservedDate) {
       return res.status(200).json({ message: "reserved" });
     } else {
-      return res.status(404).json({ message: "available" });
+      return res.status(200).json({ message: "available" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
