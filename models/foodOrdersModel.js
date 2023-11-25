@@ -5,9 +5,6 @@ const foodOrdersSchema = mongoose.Schema(
     name: {
       type: String,
     },
-    packs: {
-      type: String,
-    },
     price: {
       type: String,
     },
