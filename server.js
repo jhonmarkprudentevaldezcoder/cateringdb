@@ -5,6 +5,7 @@ const Themes = require("./models/themeModel");
 const Foods = require("./models/foodModel");
 const Drinks = require("./models/drinkModel");
 const ReservedDates = require("./models/reservedDateModel");
+const FoodOrders = require("./models/foodOrdersModel");
 
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -78,6 +79,35 @@ app.post("/theme", async (req, res) => {
     res.status(200).json(theme);
   } catch (error) {
     console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//add foood order
+app.post("/order", async (req, res) => {
+  try {
+    const order = await FoodOrders.create(req.body);
+    res.status(200).json(order);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//get user order
+app.get("/order/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const orders = await FoodOrders.find({ userId: userId });
+
+    if (orders.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No orders id matching records found" });
+    }
+
+    res.status(200).json(orders);
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
