@@ -14,6 +14,9 @@ const foodOrdersSchema = mongoose.Schema(
     userId: {
       type: String,
     },
+    pax: {
+      type: String,
+    },
   },
   {
     timestamps: true,
