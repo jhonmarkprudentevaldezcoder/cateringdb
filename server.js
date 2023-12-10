@@ -105,6 +105,17 @@ app.post("/check-date", async (req, res) => {
   }
 });
 
+//add to reserved
+app.post("/reserved", async (req, res) => {
+  try {
+    const reserved = await Reservation.create(req.body);
+    res.status(200).json(reserved);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //add to cart
 app.post("/cart", async (req, res) => {
   try {
@@ -256,6 +267,7 @@ app.post("/login", async (req, res) => {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
+      contact: user.contact,
     });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });

@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please enter password"],
     },
+    contact: {
+      type: String,
+      required: [true, "Please enter contact"],
+    },
   },
   {
     timestamps: true,
