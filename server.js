@@ -23,6 +23,22 @@ app.get("/", (req, res) => {
   res.send("API CATERING APP WORKING SUCCESS");
 });
 
+//get user history
+app.get("/history/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const reservation = await Reservation.find({ userId: userId });
+
+    if (reservation.length === 0) {
+      return res.status(404).json({ message: "No history records found" });
+    }
+
+    res.status(200).json(reservation);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //check date
 app.get("/reserve/:themeId/:date", async (req, res) => {
   try {
