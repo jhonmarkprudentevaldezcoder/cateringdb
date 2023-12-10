@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const reservationSchema = mongoose.Schema(
   {
+    userid: {
+      type: String,
+    },
     event: {
       type: String,
     },
