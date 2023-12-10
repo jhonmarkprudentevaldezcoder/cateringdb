@@ -42,6 +42,25 @@ app.get("/reserve/:themeId/:date", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+//get user cart
+app.get("/cart/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const orders = await FoodCart.find({ reservationId: userId });
+
+    if (orders.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No orders id matching records found" });
+    }
+
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //reserved a date
 app.post("/reserve", async (req, res) => {
   try {
