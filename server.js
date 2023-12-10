@@ -87,30 +87,19 @@ app.get("/cart/:userId", async (req, res) => {
 });
 
 //reserved a date
-app.post("/reserve", async (req, res) => {
+app.post("/check-date", async (req, res) => {
   try {
-    const { themeId, date, userId } = req.body;
+    const { date } = req.body;
 
-    const existingReservation = await ReservedDates.findOne({
-      themeId: themeId,
+    const existingReservation = await Reservation.findOne({
       date: date,
-      userId: userId,
     });
 
     if (existingReservation) {
-      return res
-        .status(400)
-        .json({ message: "Theme is already reserved on this date." });
+      return res.status(400).json({ message: "reserved." });
     }
 
-    const newReservation = new ReservedDates({
-      themeId: themeId,
-      date: date,
-      userId: userId,
-    });
-    await newReservation.save();
-
-    res.status(201).json({ message: "Reservation successful!" });
+    res.status(201).json({ message: "access" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
