@@ -43,6 +43,31 @@ app.get("/reserve/:themeId/:date", async (req, res) => {
   }
 });
 
+// Remove a food item from the user's cart
+app.delete("/cart/:userId/:foodItemId", async (req, res) => {
+  try {
+    const { userId, foodItemId } = req.params;
+
+    // Assuming you have a FoodCart model with a unique identifier (e.g., _id)
+    const removedItem = await FoodCart.findOneAndDelete({
+      _id: foodItemId,
+      reservationId: userId,
+    });
+
+    if (!removedItem) {
+      return res
+        .status(404)
+        .json({ message: "Food item not found in the user's cart" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Food item removed successfully", removedItem });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //get user cart
 app.get("/cart/:userId", async (req, res) => {
   try {
