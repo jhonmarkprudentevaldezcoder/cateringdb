@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const reservationSchema = mongoose.Schema(
   {
-    userid: {
+    userId: {
       type: String,
     },
     event: {
@@ -11,7 +11,6 @@ const reservationSchema = mongoose.Schema(
     theme: {
       type: String,
     },
-
     orderid: {
       type: String,
     },
