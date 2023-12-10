@@ -6,6 +6,8 @@ const Foods = require("./models/foodModel");
 const Drinks = require("./models/drinkModel");
 const ReservedDates = require("./models/reservedDateModel");
 const FoodOrders = require("./models/foodOrdersModel");
+const Reservation = require("./models/reservedModel");
+const FoodCart = require("./models/cartModel");
 
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -70,7 +72,16 @@ app.post("/reserve", async (req, res) => {
   }
 });
 
-//  theme
+//add to cart
+app.post("/cart", async (req, res) => {
+  try {
+    const cart = await FoodCart.create(req.body);
+    res.status(200).json(cart);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
 
 //add theme
 app.post("/theme", async (req, res) => {
