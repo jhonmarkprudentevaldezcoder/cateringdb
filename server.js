@@ -8,6 +8,7 @@ const ReservedDates = require("./models/reservedDateModel");
 const FoodOrders = require("./models/foodOrdersModel");
 const Reservation = require("./models/reservedModel");
 const FoodCart = require("./models/cartModel");
+const CartTotal = require("./models/cartTotal");
 
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -35,6 +36,56 @@ app.get("/history/:userId", async (req, res) => {
 
     res.status(200).json(reservation);
   } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.put("/carttotal/:userId/:total", async (req, res) => {
+  try {
+    const { userId, total } = req.params;
+
+    // Assuming your CartTotal model has a 'total' field
+    const carttotal = await CartTotal.findOneAndUpdate(
+      { userId: userId },
+      { total: total, ...req.body },
+      { new: true }
+    );
+
+    if (!carttotal) {
+      return res
+        .status(404)
+        .json({ message: `Cannot find any CartTotal with ID ${userId}` });
+    }
+
+    res.status(200).json(carttotal);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//get user history
+app.get("/carttotal/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const carttotal = await CartTotal.find({ userId: userId });
+
+    if (carttotal.length === 0) {
+      return res.status(404).json({ message: "No history records found" });
+    }
+
+    res.status(200).json(carttotal);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//add to reserved
+app.post("/carttotal", async (req, res) => {
+  try {
+    const carttotal = await CartTotal.create(req.body);
+    res.status(200).json(carttotal);
+  } catch (error) {
+    console.log(error.message);
     res.status(500).json({ message: error.message });
   }
 });
