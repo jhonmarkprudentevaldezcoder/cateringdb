@@ -45,16 +45,19 @@ app.put("/carttotal/:userId/:total", async (req, res) => {
     const { userId, total } = req.params;
 
     // Assuming your CartTotal model has a 'total' field
-    const carttotal = await CartTotal.findOneAndUpdate(
+    let carttotal = await CartTotal.findOneAndUpdate(
       { userId: userId },
       { total: total, ...req.body },
       { new: true }
     );
 
     if (!carttotal) {
-      return res
-        .status(404)
-        .json({ message: `Cannot find any CartTotal with ID ${userId}` });
+      // If document is not found, create a new one
+      carttotal = await CartTotal.create({
+        userId: userId,
+        total: total,
+        ...req.body,
+      });
     }
 
     res.status(200).json(carttotal);
@@ -75,17 +78,6 @@ app.get("/carttotal/:userId", async (req, res) => {
 
     res.status(200).json(carttotal);
   } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-//add to reserved
-app.post("/carttotal", async (req, res) => {
-  try {
-    const carttotal = await CartTotal.create(req.body);
-    res.status(200).json(carttotal);
-  } catch (error) {
-    console.log(error.message);
     res.status(500).json({ message: error.message });
   }
 });
