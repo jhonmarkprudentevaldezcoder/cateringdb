@@ -70,13 +70,13 @@ app.put("/carttotal/:userId/:total", async (req, res) => {
 app.get("/carttotal/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const carttotal = await CartTotal.find({ userId: userId });
+    const cartTotal = await CartTotal.findOne({ userId });
 
-    if (carttotal.length === 0) {
-      return res.status(404).json({ message: "No history records found" });
+    if (!cartTotal) {
+      return res.status(404).json({ message: "No history record found" });
     }
 
-    res.status(200).json(carttotal);
+    res.status(200).json(cartTotal);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
