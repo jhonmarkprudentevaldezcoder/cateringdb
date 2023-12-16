@@ -30,7 +30,7 @@ app.get("/history/:userId", async (req, res) => {
     const { userId } = req.params;
     const reservations = await Reservation.find({
       userId: userId,
-      status: { $ne: "cancel" },
+      status: { $ne: "cancelled" },
     });
 
     if (reservations.length === 0) {
