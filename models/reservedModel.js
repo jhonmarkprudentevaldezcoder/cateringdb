@@ -44,6 +44,9 @@ const reservationSchema = mongoose.Schema(
     status: {
       type: String,
     },
+    reference: {
+      type: String,
+    },
   },
   {
     timestamps: true,
