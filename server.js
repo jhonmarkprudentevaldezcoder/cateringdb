@@ -94,6 +94,35 @@ app.put("/carttotal/:userId/:total", async (req, res) => {
   }
 });
 
+app.put("/deccarttotal/:userId/:total", async (req, res) => {
+  try {
+    const { userId, total } = req.params;
+
+    // Assuming your CartTotal model has a 'total' field
+    let carttotal = await CartTotal.findOne({ userId: userId });
+
+    if (!carttotal) {
+      return res
+        .status(404)
+        .json({ message: "Cart total not found for the user." });
+    }
+
+    // Decrease the total by the specified amount
+    const newTotal = parseInt(carttotal.total) - parseInt(total);
+
+    // Update the CartTotal with the new total
+    carttotal = await CartTotal.findOneAndUpdate(
+      { userId: userId },
+      { total: newTotal, ...req.body },
+      { new: true }
+    );
+
+    res.status(200).json(carttotal);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //get user history
 app.get("/carttotal/:userId", async (req, res) => {
   try {
