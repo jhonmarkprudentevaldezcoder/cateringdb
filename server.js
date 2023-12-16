@@ -43,6 +43,31 @@ app.get("/history/:userId", async (req, res) => {
   }
 });
 
+// Update reservation status to "cancelled"
+app.put("/history/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Assuming your Reservation model has a 'status' field
+    const updatedReservation = await Reservation.findByIdAndUpdate(
+      id,
+      { status: "cancelled" },
+      { new: true }
+    );
+
+    if (!updatedReservation) {
+      return res.status(404).json({ message: "Reservation not found" });
+    }
+
+    res.status(200).json({
+      message: "Reservation status updated to 'cancelled'",
+      reservation: updatedReservation,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.put("/carttotal/:userId/:total", async (req, res) => {
   try {
     const { userId, total } = req.params;
