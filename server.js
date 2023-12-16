@@ -28,13 +28,16 @@ app.get("/", (req, res) => {
 app.get("/history/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const reservation = await Reservation.find({ userId: userId });
+    const reservations = await Reservation.find({
+      userId: userId,
+      status: { $ne: "cancel" },
+    });
 
-    if (reservation.length === 0) {
+    if (reservations.length === 0) {
       return res.status(404).json({ message: "No history records found" });
     }
 
-    res.status(200).json(reservation);
+    res.status(200).json(reservations);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
